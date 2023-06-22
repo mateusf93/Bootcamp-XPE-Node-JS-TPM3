@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model animais {
+  animal_id       Int           @id @default(autoincrement())
+  nome            String        @db.Char(100)
+  tipo            String        @db.Char(100)
+  proprietario_id Int
+  proprietarios   proprietarios @relation(fields: [proprietario_id], references: [proprietario_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_proprietarios")
+
+  @@index([proprietario_id], map: "fk_proprietarios")
+}
+
+model proprietarios {
+  proprietario_id Int       @id @default(autoincrement())
+  nome            String    @db.Char(100)
+  telefone        String    @db.Char(100)
+  animais         animais[]
+}
